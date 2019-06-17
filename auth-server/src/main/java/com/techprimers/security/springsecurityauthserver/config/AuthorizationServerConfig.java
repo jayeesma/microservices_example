@@ -20,6 +20,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 
+        System.out.println("C1");
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
@@ -27,6 +28,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        System.out.println("C2");
         clients
                 .inMemory()
                 .withClient("ClientId")
@@ -39,6 +41,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        System.out.println("C3");
 
         endpoints.authenticationManager(authenticationManager);
     }

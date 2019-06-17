@@ -1,5 +1,6 @@
 package com.techprimers.security.springsecurityauthserver.config;
 
+import com.techprimers.security.springsecurityauthserver.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,28 +17,46 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.requestMatchers()
-                .antMatchers("/login", "/oauth/authorize")
-                .and()
+        System.out.println("C4");
+        http
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
                 .permitAll();
+//        http.requestMatchers()
+//                .antMatchers("/login", "/oauth/authorize")
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/api/**")
+//                .hasRole("ADMIN")
+//                .and()
+//                .formLogin()
+//                .permitAll();
+
+
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/api/**")
+//                .hasRole("ADMIN")
+//                .and()
+//                .httpBasic().and().csrf().disable();
+
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.println("C5");
 
         auth.parentAuthenticationManager(authenticationManager)
-                .inMemoryAuthentication()
-                .withUser("Peter")
-                .password("peter")
-                .roles("USER");
+                .userDetailsService(customUserDetailsService);
     }
 }
